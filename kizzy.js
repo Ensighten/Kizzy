@@ -4,12 +4,7 @@
   * https://github.com/ded/kizzy
   * License: MIT
   */
-!function (name, definition) {
-  if (typeof module != 'undefined') module.exports = definition()
-  else if (typeof define == 'function' && typeof define.amd == 'object') define(definition)
-  else this[name] = definition()
-}('kizzy', function () {
-
+var store = (function () { 
   function noop() {}
   var hasLocalStorage
     , doc = document
@@ -18,7 +13,6 @@
     , writeThrough = function () {
         return 1
       }
-
 
   try {
     // HTML5 local storage
@@ -208,4 +202,4 @@
   kizzy.clear = clearLocalStorage
 
   return kizzy
-})
+})();
