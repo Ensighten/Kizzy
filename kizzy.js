@@ -161,35 +161,43 @@ var store = (function () {
 
   _Kizzy.prototype = {
 
-    set: function (k, v, optTtl) {
+    set: function (k, v, optTtl, cb) {
+      cb=cb||noop;
       this._[k] = {
         value: v,
         e: isNumber(optTtl) ? time() + optTtl : 0
       }
       writeThrough(this) || this.remove(k)
-      return v
+      return cb(v);
     },
 
-    get: function (k) {
+    get: function (k, cb) {
+      cb=cb||noop;
       checkExpiry(this, k)
-      return this._[k] ? this._[k].value : undefined
+      return cb(this._[k] ? this._[k].value : undefined)
     },
 
-    remove: function (k) {
+    remove: function (k, cb) {
+      cb=cb||noop;
       delete this._[k];
       writeThrough(this)
+      cb();
     },
 
-    clear: function () {
+    clear: function (cb) {
+      cb=cb||noop;
       this._ = {}
-      writeThrough(this)
+      writeThrough(this);
+      cb();
     },
 
-    clearExpireds: function() {
+    clearExpireds: function(cb) {
+      cb=cb||noop;
       for (var k in this._) {
         checkExpiry(this, k)
       }
-      writeThrough(this)
+      writeThrough(this);
+      cb();
     }
   }
 
