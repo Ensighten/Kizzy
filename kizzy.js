@@ -162,7 +162,7 @@ var store = (function () {
   _Kizzy.prototype = {
 
     set: function (k, v, optTtl, cb) {
-      cb=cb||noop;
+      cb=(typeof optTtl == "function")?optTtl : (cb||noop);
       this._[k] = {
         value: v,
         e: isNumber(optTtl) ? time() + optTtl : 0
@@ -215,5 +215,5 @@ var store = (function () {
   kizzy.remove = removeLocalStorage
   kizzy.clear = clearLocalStorage
 
-  return kizzy
+  return kizzy('ensighten');
 })();
